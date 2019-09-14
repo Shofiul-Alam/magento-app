@@ -1,0 +1,2 @@
+docker tag b6bd924f8b2a shofiul/magento:2.3.0
+docker push shofiul/magento:2.3.0
