@@ -1,0 +1,128 @@
+To install Docker on an Amazon Linux instance:
+
+
+1) Connect:
+	
+	ssh -i key.pem username@ip-address/hostname
+
+2) Update Installed Package: 
+ 	
+	sudo yum update -y
+
+
+3) Install Docker:
+
+	sudo yum install -y docker
+
+
+4) Start the Docker service:
+
+	sudo service docker start
+
+5) Add the ec2-user to the docker group :
+
+	sudo usermod -a -G docker ec2-user
+
+6) docker info
+
+
+======================== Already Done in Previous Session ===================================================
+
+
+7) Install git
+
+	sudo yum install -y git
+
+
+8) Clone the simple PHP application:
+
+	git clone https://github.com/awslabs/ecs-demo-php-simple-app
+
+9) Change directories:
+
+	cd ecs-demo-php-simple-app
+
+10) Examine the Dockerfile:
+
+	Cat Dockerfile
+
+11) Build your Docker image:
+
+	docker build -t tetranoodle .
+
+
+12) Show Docker images
+
+	docker images
+
+
+13) Run the newly built image:
+
+	docker run -p 80:80 tetranoodle
+
+
+14) After the build completes, tag your image:
+
+	docker tag tetranoodle:latest 133976391764.dkr.ecr.us-east-1.amazonaws.com/tetranoodle:latest 
+
+15) Run the following command to push this image 
+
+	docker push 133976391764.dkr.ecr.us-east-1.amazonaws.com/tetranoodle:latest
+
+
+Ip-Tables - IP Forwording for DockerAgent 
+systemctl start docker
+sudo service docker start
+1. EC host map - 172.31.15.158 ip-172-31-15-158
+2. sudo sysctl -w net.ipv4.conf.all.route_localnet=1
+3. sudo iptables -t nat -A OUTPUT -d 169.254.170.2 -p tcp --dport 80 -j REDIRECT --to-ports 51679
+4. sudo iptables -t nat -A PREROUTING -p tcp -d 169.254.170.2 --dport 80 -j DNAT --to-destination 127.0.0.1:51679
+5. 
+
+CREATE AWS Container Registery.
+
+Push Custom Docker
+
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/Shofiul-Alam/ecs-containers-for-magento.git
+git push -u origin master
+
+m-sslproxy
+m-varnish
+m-nginx
+arn:aws:s3:::magento-ecs
+
+#Registry An image
+sudo docker tag shofiul/magento:2.3.0 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/magento-cloud:2.3.0
+sudo docker push 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/magento-cloud:2.3.0
+sha256:166332ae40151f1b83fee67eed4e54b11e3cb8bc11106808a3ec9a9aeb5d914f
+
+sudo docker tag mariadb:10.2 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/mariadb:10.2
+sudo docker push 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/mariadb:10.2
+sha256:fcd185d1443893542669d4f23683c69f13f3ca61b4f13eca4da06dafcc173182
+
+sudo docker tag zsoerenm/magento2-nginx:2.2.6 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/nginx
+sudo docker push 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/nginx:2.2.6
+sha256:4720840c59667774bd4eff23b1835e7ed4cc0950178dc8b327ae3c284d2afe1a
+
+sudo docker tag zsoerenm/magento2-varnish:2.2.6 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/varnish:2.2.6
+sudo docker push 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/varnish:2.2.6
+sha256:e49aaaee2975fcf55eb027d6f7c04e570917185c1089af703418ec2176db19f9
+
+sudo docker tag zsoerenm/magento2-sslproxy:2.2.6 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/sslproxy:2.2.6
+sudo docker push 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/sslproxy:2.2.6
+sha256:e7a97e77f721b22170409a4b0109809e2f831a3e5368be42a762a7f57f53fd5b
+
+sudo docker tag redis/latest 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/redis:latest
+sudo docker push 438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/redis:alpine
+sha256:e7a97e77f721b22170409a4b0109809e2f831a3e5368be42a762a7f57f53fd5b
+
+
+dbpass -magento2_2019!~^shofi
+dbname - magento2-webnets
+dbuser - MYSQL_USER - webnets-admin
+dbuserpass- MYSQL_PASSWORD - webnets_admin_2019
+
+ssh -i "ecs-agent-credential.pem" ec2-user@ec2-3-106-120-201.ap-southeast-2.compute.amazonaws.com
