@@ -1,0 +1,123 @@
+{
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "containerDefinitions": [
+        {
+            "name": "nginx",
+            "image": "nginx:latest",
+            "memory": "128",
+            "resourceRequirements": null,
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": "80"
+                    "containerPort": "80",
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": null,
+            "secrets": null,
+            "mountPoints": [
+                {
+                    "sourceVolume": "wwwroot",
+                    "containerPath": "/usr/share/nginx/html",
+                    "readOnly": ""
+                }
+            ],
+            "volumesFrom": null,
+            "hostname": null,
+            "user": null,
+            "workingDirectory": null,
+            "extraHosts": null,
+            "logConfiguration": null,
+            "ulimits": null,
+            "dockerLabels": {
+                "name": "nginx"
+            },
+             "dependsOn": [
+                {
+                    "containerName": "db",
+                    "condition": "START"
+                }
+            ],
+            "repositoryCredentials": {
+                "credentialsParameter": ""
+            }
+        },
+        {
+            "name": "db",
+            "image": "mariadb:10.2",
+            "memory": "512",
+            "resourceRequirements": null,
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": "3306",
+                    "containerPort": "3306",
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "value": "magento2_2019!~^shofi"
+                },
+                {
+                    "name": "MYSQL_DATABASE",
+                    "value": "magento2-webnets"
+                },
+                {
+                    "name": "MYSQL_USER",
+                    "value": "webnets-admin"
+                },
+                {
+                    "name": "MYSQL_PASSWORD",
+                    "value": "webnets_admin_2019"
+                }
+            ],
+            "secrets": null,
+            "mountPoints": [
+                {
+                    "sourceVolume": "dbdata",
+                    "containerPath": "/var/lib/mysql",
+                    "readOnly": ""
+                }
+            ],
+            "volumesFrom": null,
+            "hostname": null,
+            "user": null,
+            "workingDirectory": null,
+            "extraHosts": null,
+            "logConfiguration": null,
+            "ulimits": null,
+            "dockerLabels": {
+                "name": "mariadb"
+            },
+            "dependsOn": null,
+            "healthCheck": {
+                "command": [
+                    "mysqladmin",
+                    "ping --silent"
+                ]
+            },
+            "repositoryCredentials": {
+                "credentialsParameter": ""
+            }
+        }
+    ],
+    "volumes": [
+        {
+            "host": {
+                "sourcePath": "/var/nginx/html"
+            },
+            "name": "wwwroot"
+        }
+    ],
+    "networkMode": "bridge",
+    "memory": null,
+    "cpu": null,
+    "placementConstraints": [],
+    "family": "nginx-web",
+    "tags": []
+}

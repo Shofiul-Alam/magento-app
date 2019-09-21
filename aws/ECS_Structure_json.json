@@ -1,0 +1,161 @@
+{
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "containerDefinitions": [
+        {
+            "name": "sslproxy",
+            "image": "zsoerenm/magento2-sslproxy:2.2.6",
+            "memory": "256",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": "443",
+                    "containerPort": "443",
+                    "protocol": "tcp"
+                },
+                {
+                    "hostPort": "80",
+                    "containerPort": "80",
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "BACKEND_HOST",
+                    "value": "varnish"
+                },
+                {
+                    "name": "SERVER_NAME",
+                    "value": "localhost"
+                }
+            ],
+            "links": [
+                "varnish"
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "certificates",
+                    "containerPath": "/etc/nginx/ssl"
+                }
+            ],
+            "dockerLabels": {
+                "name": "magento_sslproxy"
+            }
+        },
+         {
+            "name": "varnish",
+            "image": "zsoerenm/magento2-varnish:2.2.6",
+            "memory": "512",
+            "essential": true,
+            "dockerLabels": {
+                "name": "magento_varnish"
+            },
+             "links": [
+                "web"
+            ]
+        },
+        {
+            "name": "web",
+            "image": "zsoerenm/magento2-nginx:2.2.6",
+            "memory": "512",
+            "essential": true,
+            "environment": [
+                {
+                    "name": "BACKEND_HOST",
+                    "value": "php"
+                },
+                {
+                    "name": "SERVER_NAME",
+                    "value": "web"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "appdata",
+                    "containerPath": "/var/www/html",
+                    "readOnly": true
+                }
+            ],
+            "dockerLabels": {
+                "name": "nginx_server"
+            }
+        },
+        {
+            "name": "redis",
+            "image": "redis:alpine",
+            "memory": "512",
+            "resourceRequirements": null,
+            "essential": true,
+            "dockerLabels": {
+                "name": "magento_redis"
+            }
+        },
+        {
+            "name": "db",
+            "image": "mariadb:10.2",
+            "memory": "512",
+            "resourceRequirements": null,
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": "3306",
+                    "containerPort": "3306",
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "value": "magento2_2019!~^shofi"
+                },
+                {
+                    "name": "MYSQL_DATABASE",
+                    "value": "magento2-webnets"
+                },
+                {
+                    "name": "MYSQL_USER",
+                    "value": "webnets-admin"
+                },
+                {
+                    "name": "MYSQL_PASSWORD",
+                    "value": "webnets_admin_2019"
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "dbdata",
+                    "containerPath": "/var/lib/mysql",
+                    "readOnly": ""
+                }
+            ],
+            
+            "dockerLabels": {
+                "name": "mariadb"
+            },
+            "dependsOn": null,
+            "healthCheck": {
+                "command": [
+                    "mysqladmin",
+                    "ping --silent"
+                ]
+            }
+        }
+    ],
+    "volumes": [
+        {
+            "name": "dbdata",
+            "host": {}
+        },
+        {
+            "host": {"sourcePath": "/var/nginx/html"},
+            "name": "appdata"
+        },
+        {
+            "host": { "sourcePath": "/var/magento-app/certs" },
+            "name": "certificates"
+        }
+    ],
+    "networkMode": "bridge",
+    "family": "magento-stack"
+}

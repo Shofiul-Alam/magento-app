@@ -5,8 +5,8 @@
     "containerDefinitions": [
         {
             "name": "db",
-            "image": "438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/mariadb:10.2",
-            "memory": "1024",
+            "image": "mariadb:10.2",
+            "memory": "512",
             "resourceRequirements": null,
             "essential": true,
             "portMappings": [
@@ -126,7 +126,7 @@
         },
         {
             "name": "web",
-            "image": "438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/nginx:2.2.6",
+            "image": "zsoerenm/magento2-nginx:2.2.6",
             "memory": "512",
             "resourceRequirements": null,
             "essential": true,
@@ -171,7 +171,7 @@
         },
         {
             "name": "redis",
-            "image": "438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/redis:alpine",
+            "image": "redis:alpine",
             "memory": "512",
             "resourceRequirements": null,
             "essential": true,
@@ -196,7 +196,7 @@
         },
         {
             "name": "varnish",
-            "image": "438436019405.dkr.ecr.ap-southeast-2.amazonaws.com/varnish:2.2.6",
+            "image": "zsoerenm/magento2-varnish:2.2.6",
             "memory": "512",
             "resourceRequirements": null,
             "essential": true,
@@ -249,7 +249,7 @@
                 },
                 {
                     "name": "SERVER_NAME",
-                    "value": "webnets.com.au"
+                    "value": "ec2-3-106-120-201.ap-southeast-2.compute.amazonaws.com"
                 }
             ],
             "secrets": null,
@@ -261,7 +261,7 @@
                 }
             ],
             "volumesFrom": null,
-            "hostname": "webnets.com.au",
+            "hostname": "ec2-3-106-120-201.ap-southeast-2.compute.amazonaws.com",
             "user": null,
             "workingDirectory": null,
             "extraHosts": null,

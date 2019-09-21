@@ -1,2 +1,19 @@
 docker tag b6bd924f8b2a shofiul/magento:2.3.0
 docker push shofiul/magento:2.3.0
+
+bin/magento setup:install --base-url=http://ec2-3-106-120-201.ap-southeast-2.compute.amazonaws.com/ \
+--db-host=db --db-name=magento2 --db-user=root --db-password=magento2 \
+--admin-firstname=Shoful --admin-lastname=Alam --admin-email=shofi.tafe@gmail.com \
+--admin-user=shofiul --admin-password=Alam@1234 --language=en_AU \
+--currency=AUD --timezone=Australia/Sydney --use-rewrites=1
+
+
+addgroup -g 1000 -S magento;
+    adduser -u "${MAGENTO_USER_ID}" -D -S -s /bin/bash -G magento magento; \
+		adduser magento www-data; 
+
+sudo openssl req -key authorized-keys -new -out nginx.csr
+
+openssl req -newkey rsa:2048 -nodes -keyout nginx.key -x509 -days 365 -out nginx.crt
+
+ssh -i "ecs-agent-credential.pem" ec2-user@ec2-3-106-120-201.ap-southeast-2.compute.amazonaws.com
